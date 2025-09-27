@@ -30,31 +30,80 @@ export const AboutSlides: React.FC<AboutSlidesProps> = ({ onLogin }) => {
   }, [currentSlide]);
 
   const testimonials = [
-    "Amazing courses that helped me land my dream job!",
-    "The AI tools are incredibly helpful for learning.",
-    "Rishika's teaching style is exceptional and engaging.",
-    "Best investment I made for my career development."
+    {
+      text: "Amazing courses that helped me land my dream job! The practical approach and real-world projects made all the difference.",
+      author: "Sarah Johnson",
+      role: "Software Developer",
+      company: "Tech Corp"
+    },
+    {
+      text: "The AI tools are incredibly helpful for learning. I've improved my productivity by 300% since joining.",
+      author: "Michael Chen",
+      role: "Data Scientist",
+      company: "AI Solutions"
+    },
+    {
+      text: "Rishika's teaching style is exceptional and engaging. Complex topics become easy to understand.",
+      author: "Emily Rodriguez",
+      role: "Full Stack Developer",
+      company: "StartupXYZ"
+    },
+    {
+      text: "Best investment I made for my career development. The live classes and mentorship are invaluable.",
+      author: "David Kim",
+      role: "Product Manager",
+      company: "Innovation Labs"
+    },
+    {
+      text: "The community support and resources are outstanding. I never felt alone in my learning journey.",
+      author: "Lisa Thompson",
+      role: "UX Designer",
+      company: "Design Studio"
+    }
   ];
 
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 3000);
+        setIsTransitioning(false);
+      }, 300);
+    }, 4000);
     return () => clearInterval(interval);
   }, [testimonials.length]);
 
   const faqs = [
-    "How do I get started with the courses?",
-    "What are the prerequisites for AI courses?",
-    "Can I access courses offline?",
-    "Do you offer one-on-one mentoring?",
-    "What's included in the AI Hub?",
-    "How often are live classes conducted?",
-    "Can I get a refund if I'm not satisfied?",
-    "Do you provide certificates upon completion?"
+    {
+      question: "How do I get started with the courses?",
+      answer: "Simply sign up for an account and browse our course catalog. You can start with our beginner-friendly courses or take our skill assessment to find the perfect starting point."
+    },
+    {
+      question: "What are the prerequisites for AI courses?",
+      answer: "Basic programming knowledge is recommended for AI courses. We provide foundational materials to help you prepare if needed."
+    },
+    {
+      question: "Can I access courses offline?",
+      answer: "Yes! Our mobile app allows you to download course materials and videos for offline viewing during your commute or travel."
+    },
+    {
+      question: "Do you offer one-on-one mentoring?",
+      answer: "Absolutely! We provide personalized mentoring sessions with industry experts to help accelerate your learning journey."
+    },
+    {
+      question: "What's included in the AI Hub?",
+      answer: "The AI Hub includes cutting-edge tools for code generation, content creation, image generation, and intelligent tutoring systems."
+    },
+    {
+      question: "How often are live classes conducted?",
+      answer: "Live classes are held multiple times per week, with recordings available for those who can't attend in real-time."
+    }
   ];
+
+  const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   return (
     <div className="h-screen overflow-y-scroll scroll-smooth snap-y snap-mandatory">
@@ -232,14 +281,39 @@ export const AboutSlides: React.FC<AboutSlidesProps> = ({ onLogin }) => {
             What do students say about us?
           </h2>
 
-          <div className="bg-yellow-200 p-16 rounded-2xl mb-12 min-h-[300px] flex items-center justify-center">
-            <div className="text-center">
-              <p className="text-2xl md:text-3xl font-medium text-gray-800 mb-8 transition-opacity duration-500">
-                "{testimonials[currentTestimonial]}"
-              </p>
-              <p className="text-gray-600 uppercase tracking-wide text-sm">
-                Automatic slide show of testimonials of students
-              </p>
+          {/* Testimonial Carousel */}
+          <div className="relative bg-gradient-to-br from-yellow-200 to-orange-200 p-8 md:p-16 rounded-3xl mb-12 min-h-[400px] overflow-hidden shadow-lg">
+            <div className="relative h-full flex items-center justify-center">
+              <div className={`text-center transition-all duration-500 transform ${isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+                <div className="mb-8">
+                  <svg className="w-12 h-12 text-yellow-600 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
+                  </svg>
+                  <p className="text-xl md:text-2xl font-medium text-gray-800 mb-6 leading-relaxed italic">
+                    "{testimonials[currentTestimonial].text}"
+                  </p>
+                </div>
+                <div className="border-t border-yellow-400 pt-6">
+                  <p className="font-bold text-gray-900 text-lg">{testimonials[currentTestimonial].author}</p>
+                  <p className="text-gray-700 font-medium">{testimonials[currentTestimonial].role}</p>
+                  <p className="text-gray-600 text-sm">{testimonials[currentTestimonial].company}</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Carousel Indicators */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentTestimonial(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    currentTestimonial === index 
+                      ? 'bg-gray-800 scale-125' 
+                      : 'bg-gray-400 hover:bg-gray-600'
+                  }`}
+                />
+              ))}
             </div>
           </div>
 
@@ -254,12 +328,98 @@ export const AboutSlides: React.FC<AboutSlidesProps> = ({ onLogin }) => {
       {/* Slide 4: FAQ (full-bleed) */}
       <div className="h-screen flex items-center justify-center bg-white snap-start">
         <div className="w-full px-6 md:px-8 lg:px-12">
-          <div className="grid md:grid-cols-2 gap-12 h-full items-center">
-            <div className="bg-gray-100 p-8 rounded-2xl">
-              <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">
-                FREQUENTLY<br />
-                ASKED<br />
-                QUESTIONS
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-3 mb-12">
+              <div className="w-8 h-8 bg-gray-900 rounded-full"></div>
+              <span className="text-lg font-medium text-gray-700">SITE LOGO AND SITE NAME</span>
+            </div>
+          </div>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900">
+            Frequently Asked Questions
+          </h2>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Left Column - FAQ Items */}
+              <div className="space-y-4">
+                {faqs.slice(0, 3).map((faq, index) => (
+                  <div key={index} className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+                    <button
+                      onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                      className="w-full p-6 text-left hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-semibold text-gray-900 pr-4">{faq.question}</h3>
+                        <div className={`transform transition-transform duration-300 ${expandedFaq === index ? 'rotate-45' : ''}`}>
+                          <div className="w-6 h-6 flex items-center justify-center">
+                            <div className="w-4 h-0.5 bg-gray-600"></div>
+                            <div className="w-0.5 h-4 bg-gray-600 absolute"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                    {expandedFaq === index && (
+                      <div className="px-6 pb-6 text-gray-600 leading-relaxed animate-fadeIn">
+                        {faq.answer}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Right Column - FAQ Items */}
+              <div className="space-y-4">
+                {faqs.slice(3).map((faq, index) => (
+                  <div key={index + 3} className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+                    <button
+                      onClick={() => setExpandedFaq(expandedFaq === (index + 3) ? null : (index + 3))}
+                      className="w-full p-6 text-left hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-semibold text-gray-900 pr-4">{faq.question}</h3>
+                        <div className={`transform transition-transform duration-300 ${expandedFaq === (index + 3) ? 'rotate-45' : ''}`}>
+                          <div className="w-6 h-6 flex items-center justify-center">
+                            <div className="w-4 h-0.5 bg-gray-600"></div>
+                            <div className="w-0.5 h-4 bg-gray-600 absolute"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                    {expandedFaq === (index + 3) && (
+                      <div className="px-6 pb-6 text-gray-600 leading-relaxed animate-fadeIn">
+                        {faq.answer}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA Section */}
+            <div className="text-center mt-16">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-8 rounded-3xl text-white shadow-lg">
+                <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
+                <p className="mb-6 text-blue-100">We're here to help! Get in touch with our support team.</p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button className="bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors">
+                    Contact Support
+                  </button>
+                  <button 
+                    onClick={onLogin}
+                    className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-3 rounded-xl font-semibold transition-colors"
+                  >
+                    Join Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
               </h2>
               <button className="bg-gray-900 text-white px-8 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors">
                 Join Now
